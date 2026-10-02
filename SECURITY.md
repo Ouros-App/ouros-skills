@@ -8,7 +8,7 @@ Do not commit secrets, access tokens, private endpoints, real customer data, or 
 
 ## Reporting
 
-For vulnerabilities in these skills, use private security reporting in the Ouros organization when available. If private reporting is unavailable, contact the maintainers without publishing credentials or sensitive reproduction data.
+For vulnerabilities in these skills, use private security reporting in the Ouros organization when available. If private reporting is unavailable, contact the maintainers privately at **ouros.app@gmail.com**. Do not publish credentials, private endpoints, or sensitive reproduction data in a public issue.
 
 ## Runtime boundary
 
