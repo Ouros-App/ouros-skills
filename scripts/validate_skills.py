@@ -13,11 +13,12 @@ NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 FRONTMATTER_RE = re.compile(r"^---\n(?P<meta>.*?)\n---\n", re.DOTALL)
 
 
-def parse_frontmatter(text: str, path: Path, errors: list[str]) -> dict[str, str]:
+def parse_frontmatter(text: str, path: Path, errors: list[str]) -> tuple[dict[str, str], str]:
+    """Parse frontmatter and return metadata plus the remaining skill body."""
     match = FRONTMATTER_RE.match(text)
     if not match:
         errors.append(f"{path}: missing frontmatter")
-        return {}
+        return {}, ""
 
     values: dict[str, str] = {}
     for raw in match.group("meta").splitlines():
@@ -28,10 +29,11 @@ def parse_frontmatter(text: str, path: Path, errors: list[str]) -> dict[str, str
             continue
         key, value = raw.split(":", 1)
         values[key.strip()] = value.strip().strip('"').strip("'")
-    return values
+    return values, text[match.end():]
 
 
 def main() -> int:
+    """Validate every skill and return a process exit code."""
     errors: list[str] = []
 
     if not SKILLS.is_dir():
@@ -50,7 +52,7 @@ def main() -> int:
 
         text = skill_file.read_text(encoding="utf-8")
         rel = skill_file.relative_to(ROOT)
-        meta = parse_frontmatter(text, rel, errors)
+        meta, body = parse_frontmatter(text, rel, errors)
         name = meta.get("name", "")
         description = meta.get("description", "")
 
@@ -60,8 +62,10 @@ def main() -> int:
             errors.append(f"{rel}: name must be lowercase hyphen-case")
         if not 20 <= len(description) <= 600:
             errors.append(f"{rel}: description must be 20..600 characters")
-        if len(text.split()) > 5000:
-            errors.append(f"{rel}: exceeds 5000 words; move detail to references/")
+        if not body.strip():
+            errors.append(f"{rel}: body must contain executable instructions")
+        elif len(body.split()) > 5000:
+            errors.append(f"{rel}: body exceeds 5000 words; move detail to references/")
         if "\t" in text:
             errors.append(f"{rel}: tabs are not allowed")
 
