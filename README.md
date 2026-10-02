@@ -27,17 +27,32 @@ Shared project boundaries live in [`references/ouros-security-model.md`](referen
 
 ## Install
 
+The audit skills use a shared reference, so install the repository structure as a unit instead of copying only the skill directories.
+
 ### Codex user skills
 
 ```bash
 git clone https://github.com/Ouros-App/ouros-skills.git
-mkdir -p ~/.codex/skills
-cp -R ouros-skills/skills/* ~/.codex/skills/
+mkdir -p ~/.codex/ouros-skills
+cp -R ouros-skills/skills ouros-skills/references ~/.codex/ouros-skills/
+ln -sfn ~/.codex/ouros-skills/skills ~/.codex/skills/ouros
 ```
+
+The relative paths used by the skills remain valid because `skills/` and `references/` stay side by side.
 
 ### Repository-local skills
 
-Copy only the skills a project needs into `.codex/skills/`. Keeping the set small makes triggering more predictable and avoids wasting context.
+Copy both directories together:
+
+```text
+your-repo/
+└── .codex/
+    └── ouros-skills/
+        ├── skills/
+        └── references/
+```
+
+Then expose the skill directories from that bundle to your harness. Do not copy a single `SKILL.md` without its shared references.
 
 ## Recommended autonomous topology
 
