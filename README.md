@@ -33,12 +33,12 @@ The audit skills use a shared reference, so install the repository structure as 
 
 ```bash
 git clone https://github.com/Ouros-App/ouros-skills.git
-mkdir -p ~/.codex/ouros-skills
-cp -R ouros-skills/skills ouros-skills/references ~/.codex/ouros-skills/
-ln -sfn ~/.codex/ouros-skills/skills ~/.codex/skills/ouros
+mkdir -p ~/.codex/skills ~/.codex/references
+cp -R ouros-skills/skills/* ~/.codex/skills/
+cp -R ouros-skills/references/* ~/.codex/references/
 ```
 
-The relative paths used by the skills remain valid because `skills/` and `references/` stay side by side.
+The relative paths used by the skills remain valid because each skill lives under `~/.codex/skills/` while shared references live under `~/.codex/references/`.
 
 ### Repository-local skills
 
@@ -47,12 +47,16 @@ Copy both directories together:
 ```text
 your-repo/
 └── .codex/
-    └── ouros-skills/
-        ├── skills/
-        └── references/
+    ├── skills/
+    │   ├── ouros-security-audit/
+    │   ├── safe-runtime-testing/
+    │   ├── ouros-ai-security/
+    │   └── finding-verifier/
+    └── references/
+        └── ouros-security-model.md
 ```
 
-Then expose the skill directories from that bundle to your harness. Do not copy a single `SKILL.md` without its shared references.
+Copy `skills/*` into `.codex/skills/` and `references/*` into `.codex/references/`. Do not copy a single `SKILL.md` without its shared references.
 
 ## Recommended autonomous topology
 
