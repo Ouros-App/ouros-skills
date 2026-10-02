@@ -17,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
       - name: Validate skills
@@ -31,16 +31,18 @@ jobs:
           test -f SECURITY.md
 
   sonarcloud:
+    # Compatibility context required by branch protection.
+    # This repository is documentation-first; this job intentionally does not run a SonarCloud scan.
     name: sonarcloud
     runs-on: ubuntu-latest
     needs: ci
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Validate skill corpus
+      - name: Validate compatibility context
         run: python scripts/validate_skills.py
       - name: Explain compatibility check
-        run: echo "Keeping the required sonarcloud check context while this repository remains documentation-first."
+        run: echo "Branch protection currently requires the sonarcloud context; no SonarCloud analysis is performed in this job."
 
   codeql:
     name: codeql
